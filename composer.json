@@ -1,0 +1,23 @@
+{
+  "name": "c006/yii2-widget-banner",
+  "description": "Widget Banner Module",
+  "type": "yii2-extension, widget, banner",
+  "keywords": [
+    "yii2",
+    "extension",
+    "widgets",
+    "alert"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jon Chambers",
+      "email": "jchambers.dev@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "c006\\widget-banner\\": ""
+    }
+  }
+}

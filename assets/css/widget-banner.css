@@ -1,0 +1,40 @@
+.WidgetBanner {
+      display    : block;
+      margin     : 0;
+      margin-top : 15px;
+      padding    : 0;
+      width      : 100%;
+      position   : relative;
+      overflow   : hidden
+}
+
+.WidgetBanner .WidgetBanner-item {
+      display  : block;
+      margin   : 0;
+      padding  : 0;
+      position : relative;
+      top      : 0;
+      left     : 0;
+      cursor   : pointer
+}
+
+.WidgetBanner .WidgetBanner-item img {
+      display    : block;
+      position   : relative;
+      margin     : 0;
+      padding    : 0;
+      top        : 0;
+      left       : 0;
+      max-height : 100vh;
+      max-width  : 100vw
+}
+
+.WidgetBanner .absolute {
+      position : absolute !important
+}
+
+.WidgetBanner .no-white-space {
+      white-space : nowrap !important
+}
+
+/*# sourceMappingURL=widget-banner.css.map */
