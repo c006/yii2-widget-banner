@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 `
-php composer.phar require --prefer-source "c006/yii2-widget-banner" "dev-master"
+php composer.phar require --prefer-source "c006/yii2-widget-banner" "*"
 `
 
 or add
 
 `
-"c006/yii2-widget-banner": "dev-master"
+"c006/yii2-widget-banner": "*"
 `
 
 to the require section of your `composer.json` file.
