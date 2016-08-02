@@ -39,7 +39,7 @@ class ImageHelper
 
         $size = self::getNewImageSize('lrg');
 
-        Image::frame($this->image['image'])
+        Image::frame($this->image['image'], 0, 'FFFFFF', 100)
             ->resize(new Box($size['w'], $size['h']))
             ->save($this->base_path . '/' . $file, ['quality' => 90]);
     }
@@ -53,7 +53,7 @@ class ImageHelper
     private function getNewImageSize($size, $keep_ratio = TRUE)
     {
 
-        $nw = $nh = $this->sizes[ $size ];
+        $nw = $nh = $this->sizes[$size];
 
         if ($keep_ratio) {
             /* W > H */
@@ -90,7 +90,7 @@ class ImageHelper
     {
         $file = explode('.', $file);
 
-        return $file[ sizeof($file) - 1 ];
+        return $file[sizeof($file) - 1];
 
     }
 
