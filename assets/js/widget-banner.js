@@ -99,6 +99,7 @@ var WidgetBanner = (function () {
         f_fade: function (_i) {
             var _this = this;
             _i = _this.get_i(_i);
+            var _pause = (_this.items.length) ? _this.items[_i].pause : 5000;
             setTimeout(function () {
                 var $banner = jQuery('.' + object_id + '-item[item_id=' + _i + ']');
                 $banner.appendTo(_this.container_id);
@@ -112,9 +113,8 @@ var WidgetBanner = (function () {
                         $banner.attr('item_on', '1');
                     }
                 );
-
                 _this.f_fade(_i);
-            }, _this.items[_i].pause);
+            }, _pause);
         },
 
         /**
@@ -189,7 +189,7 @@ var WidgetBanner = (function () {
                 _this.timout_id = setTimeout(function () {
                     var $container = jQuery(_this.container_id);
                     var _cw = $container.width();
-                    if (_cw < _this.items[0].width) {
+                    if (_this.items.length && _cw < _this.items[0].width) {
                         $container
                             .find('.' + object_id + '-item')
                             .each(function (_i) {

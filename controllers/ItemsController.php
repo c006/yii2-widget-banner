@@ -84,8 +84,8 @@ class ItemsController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $model->date_start = AppHelpers::dateToTime($model->date_start, 'DD-MM-YYYY') + AppHelpers::hoursToSeconds($model->date_start_hour);
-            $model->date_end = AppHelpers::dateToTime($model->date_end, 'DD-MM-YYYY') + AppHelpers::hoursToSeconds($model->date_start_hour);
+            $model->date_start = AppHelpers::dateToTime($model->date_start, 'MM/DD/YYYY') + AppHelpers::hoursToSeconds($model->date_start_hour);
+            $model->date_end = AppHelpers::dateToTime($model->date_end, 'MM/DD/YYYY') + AppHelpers::hoursToSeconds($model->date_start_hour);
             $model->save();
 
             return $this->redirect(['index', 'id' => $model->id]);

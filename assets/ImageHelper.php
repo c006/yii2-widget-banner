@@ -2,8 +2,9 @@
 
 namespace c006\widget\banner\assets;
 
-use Imagine\Gd\Imagine;
+
 use Imagine\Image\Box;
+use yii\imagine\Image;
 
 class ImageHelper
 {
@@ -16,13 +17,19 @@ class ImageHelper
         'lrg' => 1000,
     ];
 
+    /**
+     * ImageHelper constructor.
+     * @param bool $base_path
+     */
     function __construct($base_path = FALSE)
     {
         $this->base_path = ($base_path) ? $base_path : \Yii::getAlias('@frontend') . '/web/images/widget/banner';
-        $this->imagine = new Imagine();
     }
 
-
+    /**
+     * @param $file
+     * @param $tmp_file
+     */
     public function saveImage($file, $tmp_file)
     {
         $this->image = [
@@ -31,9 +38,10 @@ class ImageHelper
         ];
 
         $size = self::getNewImageSize('lrg');
-        $image = $this->imagine->open($this->image['image']);
-        $image->resize(new Box($size['w'], $size['h']));
-        $image->save($this->base_path . '/' . $file, ['quality' => 90]);
+
+        Image::frame($this->image['image'])
+            ->resize(new Box($size['w'], $size['h']))
+            ->save($this->base_path . '/' . $file, ['quality' => 90]);
     }
 
     /**
