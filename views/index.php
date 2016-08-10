@@ -16,7 +16,7 @@ $func_name = str_replace('-', '_', $id);
              item_id="<?= $index ?>"
              item_on="<?= ($index > 0) ? '0' : '1' ?>"
              item_pause="<?= $item['pause'] ?>"
-             item_ratio="<?= $item['file']['height'] / $item['file']['width'] ?>"
+             item_ratio="<?= $array['banner']['height'] / $array['banner']['width'] ?>"
             >
             <?php if ($item['url']) : ?>
             <a href="<?= $item['url'] ?>">

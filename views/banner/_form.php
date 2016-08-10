@@ -20,6 +20,15 @@ use yii\helpers\Html;
         <?= $form->field($model, 'name')->textInput(['maxlength' => TRUE])->label('Group Name')->hint('Example: Home Page or Catalog Page') ?>
 
         <div class="table">
+            <div class="table-cell width-50">
+                <?= $form->field($model, 'width')->textInput()->label('Width') ?>
+            </div>
+            <div class="table-cell">
+                <?= $form->field($model, 'height')->textInput()->label('Height') ?>
+            </div>
+        </div>
+
+        <div class="table">
             <div class="table-cell"><?
                 $model_link = \c006\widget\banner\models\WidgetBannerTransitions::find()->orderBy('name')->all();
                 $model_link = ArrayHelper::map($model_link, 'id', 'name');

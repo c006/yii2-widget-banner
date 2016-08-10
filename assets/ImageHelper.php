@@ -32,6 +32,7 @@ class ImageHelper
      */
     public function saveImage($file, $tmp_file)
     {
+
         $this->image = [
             'image' => $tmp_file,
             'size'  => getimagesize($tmp_file)

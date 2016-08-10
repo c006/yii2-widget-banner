@@ -9,6 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property integer $width
+ * @property integer $height
  * @property integer $transition_id
  * @property integer $transition_type_id
  * @property integer $transition_time
@@ -31,8 +33,8 @@ class WidgetBanner extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['transition_id', 'transition_type_id', 'transition_time', 'active'], 'integer'],
+            [['name', 'width', 'height'], 'required'],
+            [['transition_id', 'transition_type_id', 'transition_time', 'active', 'width', 'height'], 'integer'],
             [['css'], 'string'],
             [['name'], 'string', 'max' => 100],
         ];
@@ -46,6 +48,8 @@ class WidgetBanner extends \yii\db\ActiveRecord
         return [
             'id'                 => Yii::t('app', 'ID'),
             'name'               => Yii::t('app', 'Name'),
+            'width'              => Yii::t('app', 'Width'),
+            'height'             => Yii::t('app', 'Height'),
             'transition_id'      => Yii::t('app', 'Transition ID'),
             'transition_type_id' => Yii::t('app', 'Transition Type ID'),
             'transition_time'    => Yii::t('app', 'Transition Time'),
