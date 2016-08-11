@@ -2,6 +2,7 @@
 
 namespace c006\widget\banner\controllers;
 
+use c006\alerts\Alerts;
 use c006\core\assets\CoreHelper;
 use c006\widget\banner\models\search\WidgetBanner as WidgetBannerSearch;
 use c006\widget\banner\models\WidgetBanner;
@@ -75,6 +76,10 @@ class BannerController extends Controller
         $model = new WidgetBanner();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            Alerts::setMessage("Success: Banner created");
+            Alerts::setAlertType(Alerts::ALERT_SUCCESS);
+
             return $this->redirect(['index', 'id' => $model->id]);
         } else {
             $model->transition_time = 1500;
@@ -98,6 +103,11 @@ class BannerController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            Alerts::setMessage("Success: Banner updated");
+            Alerts::setAlertType(Alerts::ALERT_SUCCESS);
+
+
             return $this->redirect(['index', 'id' => $model->id]);
         } else {
             return $this->render('update', [

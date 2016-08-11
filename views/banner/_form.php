@@ -42,6 +42,8 @@ use yii\helpers\Html;
 
         <?= $form->field($model, 'css')->textarea()->hint('.WidgetBanner {} and .WidgetBanner-item {}') ?>
 
+        <?= $form->field($model, 'show_arrows')->dropDownList(['No', 'Yes']) ?>
+
         <?= $form->field($model, 'active')->dropDownList(['No', 'Yes']) ?>
 
         <div class="form-group">

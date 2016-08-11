@@ -14,6 +14,7 @@ use Yii;
  * @property integer $transition_id
  * @property integer $transition_type_id
  * @property integer $transition_time
+ * @property integer $show_arrows
  * @property string $css
  * @property integer $active
  */
@@ -34,7 +35,7 @@ class WidgetBanner extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'width', 'height'], 'required'],
-            [['transition_id', 'transition_type_id', 'transition_time', 'active', 'width', 'height'], 'integer'],
+            [['transition_id', 'transition_type_id', 'transition_time', 'active', 'show_arrows', 'width', 'height'], 'integer'],
             [['css'], 'string'],
             [['name'], 'string', 'max' => 100],
         ];
@@ -53,6 +54,7 @@ class WidgetBanner extends \yii\db\ActiveRecord
             'transition_id'      => Yii::t('app', 'Transition ID'),
             'transition_type_id' => Yii::t('app', 'Transition Type ID'),
             'transition_time'    => Yii::t('app', 'Transition Time'),
+            'show_arrows'        => Yii::t('app', 'Show Arrows'),
             'css'                => Yii::t('app', 'Css'),
             'active'             => Yii::t('app', 'Active'),
         ];

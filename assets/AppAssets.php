@@ -17,7 +17,7 @@ class AppAssets extends AssetBundle
      * @inheritdoc
      */
     public $css = [
-        'css/widget-banner.css',
+        'web/css/widget-banner.css',
     ];
 
     /**

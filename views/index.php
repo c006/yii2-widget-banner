@@ -10,14 +10,16 @@ $func_name = str_replace('-', '_', $id);
     <?= $array['banner']['css'] ?>
 </style>
 
-<div id="<?= $id ?>" class="<?= $class ?>" item_type="<?= $array['banner']['type'] ?>" item_transition="<?= $array['banner']['transition'] ?>" item_duration="<?= $array['banner']['transition_time'] ?>">
+
+<div id="<?= $id ?>" class="<?= $class ?>" item_type="<?= $array['banner']['type'] ?>" item_transition="<?= $array['banner']['transition'] ?>"
+     item_duration="<?= $array['banner']['transition_time'] ?>">
     <?php foreach ($array['items'] as $index => $item) : ?>
         <div class="<?= $class ?>-item item-<?= $index ?>" style="opacity: <?= ($index > 0) ? '0' : '1' ?>;"
              item_id="<?= $index ?>"
              item_on="<?= ($index > 0) ? '0' : '1' ?>"
              item_pause="<?= $item['pause'] ?>"
              item_ratio="<?= $array['banner']['height'] / $array['banner']['width'] ?>"
-            >
+        >
             <?php if ($item['url']) : ?>
             <a href="<?= $item['url'] ?>">
                 <?php endif ?>
@@ -27,6 +29,12 @@ $func_name = str_replace('-', '_', $id);
         <?php endif ?>
         </div>
     <?php endforeach ?>
+    <?php if ($array['banner']['show_arrows']) : ?>
+        <div class="icon arrow-left"></div>
+        <div class="icon arrow-right"></div>
+    <?php endif; ?>
+    <div class="icon-pause"></div>
+    <div class="icon-play"></div>
 </div>
 
 

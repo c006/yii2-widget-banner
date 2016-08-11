@@ -22,9 +22,11 @@ var WidgetBanner = (function () {
      */
     function WidgetBanner() {
         this.container_id = '';
+        this.container = '';
         this.items = [];
-        this.timer = {duration: 0, i: -1, last: -1, trans: 'left', easing: 'linear', item: {}};
+        this.timer = {duration: 0, i: -1, last: -1, trans: 'fade', easing: 'linear', pause: 0, timer_id: 0};
         this.timout_id = 0;
+        this.pause = 0;
 
     }
 
@@ -45,134 +47,118 @@ var WidgetBanner = (function () {
             var _this = this;
             _this.height = 0;
 
-            _this.on_resize();
+            _this.container = jQuery(this.container_id);
 
-            var $container = jQuery(this.container_id);
+            _this.container.find('.arrow-left').click(function () {
+                var _i = _this.container.find('.' + object_id + '-item[item_on=1]').attr('item_id') * 1.00;
+                _i = _this.get_i(_i - 1.00);
+                clearTimeout(_this.timer.timer_id);
+                _this.next_i(_i);
+                var _f = '_this.f_' + _this.timer.trans + '()';
+                eval(_f);
+            });
+            _this.container.find('.arrow-right').click(function () {
+                var _i = _this.container.find('.' + object_id + '-item[item_on=1]').attr('item_id') * 1.00;
+                _i = _this.get_i(_i + 1.00);
+                clearTimeout(_this.timer.timer_id);
+                _this.next_i(_i);
+                var _f = '_this.f_' + _this.timer.trans + '()';
+                eval(_f);
+            });
+
+            _this.container.find('.icon-pause').click(function () {
+                clearTimeout(_this.timer.timer_id);
+                _this.pause = 1;
+                _this.container.find('.icon-pause').hide();
+                _this.container.find('.icon-play').show();
+            });
+
+            _this.container.find('.icon-play').click(function () {
+                clearTimeout(_this.timer.timer_id);
+                _this.pause = 0;
+                _this.next_i(_this.get_i(_this.timer.i));
+                _this.timer.pause = 100;
+                _this.f_timer();
+                _this.container.find('.icon-play').hide();
+            });
 
             _this.timer = {
-                duration: $container.attr('item_duration'),
-                transition: $container.attr('item_transition'),
-                easing: $container.attr('item_type'),
-                pause: 0,
-                item: {}
+                duration: _this.container.attr('item_duration'),
+                transition: _this.container.attr('item_transition'),
+                easing: _this.container.attr('item_type'),
+                pause: 0
             };
 
-            $container
+            _this.container
                 .find('.' + object_id + '-item')
                 .each(function () {
                     var $this = jQuery(this);
                     _this.items.push({
                         pause: $this.attr('item_pause'),
                         ratio: $this.attr('item_ratio'),
-                        width: $this.find('img').width()
+                        img: $this.find('img').attr('src')
                     });
                 });
 
-
-            var $banner = jQuery('.' + object_id + '-item[item_on=1]');
+            var $banner = _this.container.find('.' + object_id + '-item[item_on=1]');
             $banner.appendTo(_this.container_id);
 
             switch (this.timer.transition) {
                 case 'Fade':
-                    $container.find('.' + object_id + '-item').addClass('absolute');
+                    _this.container.find('.' + object_id + '-item').addClass('absolute');
                     jQuery('.' + object_id + '-item[item_on=1]').removeClass('absolute');
-
-                    _this.f_fade(0);
+                    _this.timer.trans = 'fade';
                     break;
                 case 'Slide Left':
-                    $container.find('.' + object_id + '-item').addClass('absolute').css({opacity: 1});
+                    _this.container.find('.' + object_id + '-item').addClass('absolute').css({opacity: 1});
                     jQuery('.' + object_id + '-item[item_on=1]').removeClass('absolute');
-                    _this.f_slide_left(0);
+                    _this.timer.trans = 'slide_left';
                     break;
                 case 'Slide Right':
-                    $container.find('.' + object_id + '-item').addClass('absolute').css({opacity: 1});
+                    _this.container.find('.' + object_id + '-item').addClass('absolute').css({opacity: 1});
                     jQuery('.' + object_id + '-item[item_on=1]').removeClass('absolute');
-                    _this.f_slide_right(0);
+                    _this.timer.trans = 'slide_right';
                     break;
             }
+            _this.next_i(1);
+            _this.f_timer();
+
+            _this.on_resize();
+        },
+
+
+        f_timer: function () {
+            var _this = this;
+            if (_this.pause) {
+                return;
+            }
+            _this.timer.timer_id = setTimeout(function () {
+                var _f = '_this.f_' + _this.timer.trans + '()';
+                eval(_f);
+            }, _this.timer.pause);
         },
 
         /**
          *
-         * @param _i
          */
-        f_fade: function (_i) {
+        f_fade: function () {
             var _this = this;
-            _i = _this.get_i(_i);
-            var _pause = (_this.items.length) ? _this.items[_i].pause : 5000;
+            var $banner = jQuery('.' + object_id + '-item[item_id=' + _this.timer.i + ']');
+            $banner.appendTo(_this.container_id);
             setTimeout(function () {
-                var $banner = jQuery('.' + object_id + '-item[item_id=' + _i + ']');
-                $banner.appendTo(_this.container_id);
+                clearTimeout(_this.timer.timer_id);
                 $banner.animate(
                     {opacity: 1},
-                    _this.timer.duration * 1.00,
-                    "" + _this.timer.easing,
+                    _this.timer.duration * 1.00, "" + _this.timer.easing,
                     function () {
-                        var $item = jQuery('.' + object_id + '-item[item_on=1]');
+                        var $item = _this.container.find('.' + object_id + '-item[item_on=1]');
                         $item.css({opacity: 0}).attr('item_on', '0');
                         $banner.attr('item_on', '1');
+                        _this.next_i(_this.get_i(_this.timer.i + 1));
+                        _this.f_timer();
                     }
                 );
-                _this.f_fade(_i);
-            }, _pause);
-        },
-
-        /**
-         *
-         * @param _i
-         */
-        f_slide_left: function (_i) {
-            var _this = this;
-            _i = _this.get_i(_i);
-            setTimeout(function () {
-                var $banner = jQuery('.' + object_id + '-item[item_id=' + _i + ']');
-                $banner.appendTo(_this.container_id);
-                var $img = $banner.find('> img');
-                $img.css({top: -($img.height() * 1) + 'px', left: ($img.width() * 1) + 'px'});
-                $img
-                    .animate(
-                    {left: 0},
-                    _this.timer.duration * 1.00,
-                    "" + _this.timer.easing,
-                    function () {
-                        var $item = jQuery('.' + object_id + '-item[item_on=1]');
-                        $item.attr('item_on', '0').addClass('absolute');
-                        $banner.attr('item_on', '1').removeClass('absolute');
-                        $img.css({top: 0});
-                    }
-                );
-
-                _this.f_slide_left(_i);
-            }, _this.items[_i].pause);
-        },
-
-        /**
-         *
-         * @param _i
-         */
-        f_slide_right: function (_i) {
-            var _this = this;
-            _i = _this.get_i(_i);
-            setTimeout(function () {
-                var $banner = jQuery('.' + object_id + '-item[item_id=' + _i + ']');
-                $banner.appendTo(_this.container_id);
-                var $img = $banner.find('> img');
-                $img.css({top: -($img.height() * 1) + 'px', left: -($img.width() * 1) + 'px'});
-                $img
-                    .animate(
-                    {left: 0},
-                    _this.timer.duration * 1.00,
-                    "" + _this.timer.easing,
-                    function () {
-                        var $item = jQuery('.' + object_id + '-item[item_on=1]');
-                        $item.attr('item_on', '0').addClass('absolute');
-                        $banner.attr('item_on', '1').removeClass('absolute');
-                        $img.css({top: 0});
-                    }
-                );
-
-                _this.f_slide_right(_i);
-            }, _this.items[_i].pause);
+            }, 100);
         },
 
         on_resize: function () {
@@ -187,10 +173,9 @@ var WidgetBanner = (function () {
             var _this = this;
             if (!_this.timout_id) {
                 _this.timout_id = setTimeout(function () {
-                    var $container = jQuery(_this.container_id);
-                    var _cw = $container.width();
+                    var _cw = _this.container.width();
                     if (_this.items.length && _cw < _this.items[0].width) {
-                        $container
+                        _this.container
                             .find('.' + object_id + '-item')
                             .each(function (_i) {
                                 var $this = jQuery(this);
@@ -200,7 +185,7 @@ var WidgetBanner = (function () {
                                 });
                             });
                     } else {
-                        $container
+                        _this.container
                             .find('.' + object_id + '-item')
                             .css({
                                 maxWidth: '100%',
@@ -211,6 +196,25 @@ var WidgetBanner = (function () {
                     _this.timout_id = 0;
                 }, 200);
             }
+        }
+        ,
+        /**
+         *
+         * @param _i
+         * @returns {number|*}
+         */
+        get_i: function (_i) {
+            _i = _i * 1;
+            var _len = this.items.length - 1;
+            if (_i > _len) {
+                _i = 0
+            } else if (_i < 0) {
+                _i = _len;
+            }
+            if (!this.items[_i] || this.items[_i] == undefined) {
+                _i = 0;
+            }
+            return _i;
         },
 
         /**
@@ -218,16 +222,19 @@ var WidgetBanner = (function () {
          * @param _i
          * @returns {*}
          */
-        get_i: function (_i) {
-            _i++;
-            if (_i == undefined || _i >= jQuery('.' + object_id + '-item').length) {
-                _i = 0;
-            }
-            return _i;
-        },
+        next_i: function (_i) {
+            this.timer.i = _i;
+            var _pause = this.container.find('.' + object_id + '-item.item-' + _i).attr('item_pause') * 1.00;
+            this.timer.pause = (_pause) ? _pause : 8000;
+        }
+        ,
+        /**
+         *
+         */
         end: function () {
         }
     };
 
     return WidgetBanner;
-})();
+})
+();
