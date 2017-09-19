@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function ($model) {
                     $m = \c006\widget\banner\models\WidgetBannerFiles::findOne($model->file_id);
                     if (is_object($m)) {
-                        return '<div><img src="//' . str_replace('manage.', '', $_SERVER['SERVER_NAME']) . '/images/widget/banner/' . $m->file . '" height="100" /></div>';
+                        return '<div><img src="//' . str_replace('admin.', '', $_SERVER['SERVER_NAME']) . '/images/widget/banner/' . $m->file . '" height="100" /></div>';
                     }
 
                     return 'ID: ' . $model->file_id;

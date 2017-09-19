@@ -19,7 +19,7 @@ class BannerController extends Controller
     function init()
     {
         //$this->layout = '@c006/widget/banner/views/layouts/main';
-        if (CoreHelper::checkLogin() && CoreHelper::isGuest()) {
+        if (CoreHelper::isGuest()) {
             return $this->redirect('/user');
         }
     }

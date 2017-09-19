@@ -1,4 +1,5 @@
 <?php
+
 namespace c006\widget\banner\controllers;
 
 use c006\alerts\Alerts;
@@ -20,7 +21,7 @@ class FilesController extends Controller
     function init()
     {
         //$this->layout = '@c006/widget/banner/views/layouts/main';
-        if (CoreHelper::checkLogin() && CoreHelper::isGuest()) {
+        if (CoreHelper::isGuest()) {
             return $this->redirect('/user');
         }
     }
@@ -29,7 +30,7 @@ class FilesController extends Controller
     {
         return [
             'verbs' => [
-                'class'   => VerbFilter::className(),
+                'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
                 ],
@@ -43,11 +44,11 @@ class FilesController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel  = new WidgetBannerFilesSearch();
+        $searchModel = new WidgetBannerFilesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel'  => $searchModel,
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -75,24 +76,31 @@ class FilesController extends Controller
     {
         $model = new WidgetBannerFiles();
         if (isset($_POST['WidgetBannerFiles'])) {
-            $image       = new ImageHelper();
-            $tmp_file    = $_FILES['WidgetBannerFiles']['tmp_name']['file'];
-            $file        = $_FILES['WidgetBannerFiles']['name']['file'];
-            $suffix      = ImageHelper::getFileExtension($file);
-            $model->name = $_POST['WidgetBannerFiles']['name'];
-            $model->file = preg_replace('/[\s|\.]+/', '-', microtime(FALSE)) . '.' . $suffix;
-            $image->saveImage($model->file, $tmp_file);
-            $size          = getimagesize($image->base_path . '/' . $model->file);
-            $model->width  = $size[0];
-            $model->height = $size[1];
-            if ($model->validate() && $model->save()) {
-                Alerts::setMessage('Updated Successfully');
-                Alerts::setAlertType(Alerts::ALERT_SUCCESS);
-                Alerts::setCountdown(4);
-            } else {
-                Alerts::setMessage('Error, please try again');
+            $image = new ImageHelper();
+            $tmp_file = $_FILES['WidgetBannerFiles']['tmp_name']['file'];
+            $file = $_FILES['WidgetBannerFiles']['name']['file'];
+
+            if (!$tmp_file) {
+                Alerts::setMessage('File too large -- Increase upload size or reduce image size');
                 Alerts::setAlertType(Alerts::ALERT_DANGER);
                 Alerts::setCountdown(8);
+            } else {
+                $suffix = ImageHelper::getFileExtension($file);
+                $model->name = $_POST['WidgetBannerFiles']['name'];
+                $model->file = preg_replace('/[\s|\.]+/', '-', microtime(FALSE)) . '.' . $suffix;
+                $image->saveImage($model->file, $tmp_file);
+                $size = getimagesize($image->base_path . '/' . $model->file);
+                $model->width = $size[0];
+                $model->height = $size[1];
+                if ($model->validate() && $model->save()) {
+                    Alerts::setMessage('Updated Successfully');
+                    Alerts::setAlertType(Alerts::ALERT_SUCCESS);
+                    Alerts::setCountdown(4);
+                } else {
+                    Alerts::setMessage('Error, please try again');
+                    Alerts::setAlertType(Alerts::ALERT_DANGER);
+                    Alerts::setCountdown(8);
+                }
             }
 
             return $this->redirect(['index']);
@@ -120,14 +128,14 @@ class FilesController extends Controller
 //            exit;
             if (isset($_FILES['WidgetBannerFiles']['name']['file'])) {
                 if ($model->file != $_FILES['WidgetBannerFiles']['name']['file']) {
-                    $image       = new ImageHelper();
-                    $file        = $_FILES['WidgetBannerFiles']['name']['file'];
-                    $tmp_file    = $_FILES['WidgetBannerFiles']['tmp_name']['file'];
-                    $suffix      = ImageHelper::getFileExtension($file);
+                    $image = new ImageHelper();
+                    $file = $_FILES['WidgetBannerFiles']['name']['file'];
+                    $tmp_file = $_FILES['WidgetBannerFiles']['tmp_name']['file'];
+                    $suffix = ImageHelper::getFileExtension($file);
                     $model->file = preg_replace('/[\s|\.]+/', '-', microtime(FALSE)) . '.' . $suffix;
                     $image->saveImage($model->file, $tmp_file);
-                    $size          = getimagesize($image->base_path . '/' . $model->file);
-                    $model->width  = $size[0];
+                    $size = getimagesize($image->base_path . '/' . $model->file);
+                    $model->width = $size[0];
                     $model->height = $size[1];
                 }
             }

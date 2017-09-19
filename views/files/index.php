@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'image',
                 'format'    => 'raw',
                 'value'     => function ($model) {
-                    return '<div><img src="//' . str_replace('manage.', '', $_SERVER['SERVER_NAME']) . '/images/widget/banner/' . $model->file . '?' . time() . '" height="100" /></div>';
+                    return '<div><img src="//' . str_replace('admin.', '', $_SERVER['SERVER_NAME']) . '/images/widget/banner/' . $model->file . '?' . time() . '" height="100" /></div>';
                 },
             ],
             'file',
